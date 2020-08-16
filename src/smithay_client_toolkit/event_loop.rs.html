@@ -121,6 +121,15 @@
 <span id="121">121</span>
 <span id="122">122</span>
 <span id="123">123</span>
+<span id="124">124</span>
+<span id="125">125</span>
+<span id="126">126</span>
+<span id="127">127</span>
+<span id="128">128</span>
+<span id="129">129</span>
+<span id="130">130</span>
+<span id="131">131</span>
+<span id="132">132</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>;
 
@@ -150,10 +159,7 @@
     <span class="doccomment">/// Wrap an `EventQueue` as a `WaylandSource`.</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">queue</span>: <span class="ident">EventQueue</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">WaylandSource</span> {
         <span class="kw">let</span> <span class="ident">fd</span> <span class="op">=</span> <span class="ident">queue</span>.<span class="ident">display</span>().<span class="ident">get_connection_fd</span>();
-        <span class="ident">WaylandSource</span> {
-            <span class="ident">queue</span>,
-            <span class="ident">fd</span>: <span class="ident">Generic</span>::<span class="ident">from_fd</span>(<span class="ident">fd</span>, <span class="ident">Interest</span>::<span class="ident">Readable</span>, <span class="ident">Mode</span>::<span class="ident">Level</span>),
-        }
+        <span class="ident">WaylandSource</span> { <span class="ident">queue</span>, <span class="ident">fd</span>: <span class="ident">Generic</span>::<span class="ident">from_fd</span>(<span class="ident">fd</span>, <span class="ident">Interest</span>::<span class="ident">Readable</span>, <span class="ident">Mode</span>::<span class="ident">Level</span>) }
     }
 
     <span class="doccomment">/// Insert this source into given event loop with an adapter that panics on orphan events</span>
@@ -171,6 +177,18 @@
                 );
             })
         })
+    }
+
+    <span class="doccomment">/// Access the underlying event queue</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This method can be used if you need to access the underlying `EventQueue` while this</span>
+    <span class="doccomment">/// `WaylandSource` is currently inserted in an event loop.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Note that you should be careful when interacting with it if you invoke methods that</span>
+    <span class="doccomment">/// interact with the wayland socket (such as `dispatch()` or `prepare_read()`). These may</span>
+    <span class="doccomment">/// interefere with the proper waking up of this event source in the event loop.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">queue</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventQueue</span> {
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">queue</span>
     }
 }
 
@@ -246,4 +264,4 @@
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "smithay_client_toolkit";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "smithay_client_toolkit";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>

@@ -824,11 +824,6 @@
 <span id="824">824</span>
 <span id="825">825</span>
 <span id="826">826</span>
-<span id="827">827</span>
-<span id="828">828</span>
-<span id="829">829</span>
-<span id="830">830</span>
-<span id="831">831</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Window abstraction</span>
 <span class="kw">use</span> <span class="ident">std</span>::<span class="ident">sync</span>::{<span class="ident">Arc</span>, <span class="ident">Mutex</span>};
@@ -1051,10 +1046,7 @@
             <span class="kw">move</span> <span class="op">|</span><span class="ident">event</span>, <span class="kw-2">mut</span> <span class="ident">ddata</span>: <span class="ident">DispatchData</span><span class="op">|</span> {
                 <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="kw-2">ref</span> <span class="kw-2">mut</span> <span class="ident">inner</span>) <span class="op">=</span> <span class="kw-2">*</span><span class="ident">frame_inner</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>() {
                     <span class="kw">match</span> <span class="ident">event</span> {
-                        <span class="ident">shell</span>::<span class="ident">Event</span>::<span class="ident">Configure</span> {
-                            <span class="ident">states</span>,
-                            <span class="kw-2">mut</span> <span class="ident">new_size</span>,
-                        } <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="ident">shell</span>::<span class="ident">Event</span>::<span class="ident">Configure</span> { <span class="ident">states</span>, <span class="kw-2">mut</span> <span class="ident">new_size</span> } <span class="op">=</span><span class="op">&gt;</span> {
                             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">frame</span> <span class="op">=</span> <span class="ident">inner</span>.<span class="ident">frame</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>();
                             <span class="comment">// clamp size</span>
                             <span class="ident">new_size</span> <span class="op">=</span> <span class="ident">new_size</span>.<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">w</span>, <span class="ident">h</span>)<span class="op">|</span> {
@@ -1237,7 +1229,16 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// You need to call `refresh()` afterwards for this to properly</span>
     <span class="doccomment">/// take effect.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_title</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">title</span>: <span class="ident">String</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">set_title</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut</span> <span class="ident">title</span>: <span class="ident">String</span>) {
+        <span class="comment">// Truncate the title to at most 1024 bytes, so that it does not blow up the protocol</span>
+        <span class="comment">// messages</span>
+        <span class="kw">if</span> <span class="ident">title</span>.<span class="ident">len</span>() <span class="op">&gt;</span> <span class="number">1024</span> {
+            <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">new_len</span> <span class="op">=</span> <span class="number">1024</span>;
+            <span class="kw">while</span> <span class="op">!</span><span class="ident">title</span>.<span class="ident">is_char_boundary</span>(<span class="ident">new_len</span>) {
+                <span class="ident">new_len</span> <span class="op">-</span><span class="op">=</span> <span class="number">1</span>;
+            }
+            <span class="ident">title</span>.<span class="ident">truncate</span>(<span class="ident">new_len</span>);
+        }
         <span class="self">self</span>.<span class="ident">frame</span>.<span class="ident">lock</span>().<span class="ident">unwrap</span>().<span class="ident">set_title</span>(<span class="ident">title</span>.<span class="ident">clone</span>());
         <span class="self">self</span>.<span class="ident">shell_surface</span>.<span class="ident">set_title</span>(<span class="ident">title</span>);
     }
@@ -1318,17 +1319,13 @@
                     <span class="prelude-val">Some</span>(<span class="ident">inner</span>.<span class="ident">min_size</span>).<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">w</span>, <span class="ident">h</span>)<span class="op">|</span> <span class="ident">frame</span>.<span class="ident">add_borders</span>(<span class="ident">w</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">h</span> <span class="kw">as</span> <span class="ident">i32</span>)),
                 );
                 <span class="self">self</span>.<span class="ident">shell_surface</span>.<span class="ident">set_max_size</span>(
-                    <span class="ident">inner</span>
-                        .<span class="ident">max_size</span>
-                        .<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">w</span>, <span class="ident">h</span>)<span class="op">|</span> <span class="ident">frame</span>.<span class="ident">add_borders</span>(<span class="ident">w</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">h</span> <span class="kw">as</span> <span class="ident">i32</span>)),
+                    <span class="ident">inner</span>.<span class="ident">max_size</span>.<span class="ident">map</span>(<span class="op">|</span>(<span class="ident">w</span>, <span class="ident">h</span>)<span class="op">|</span> <span class="ident">frame</span>.<span class="ident">add_borders</span>(<span class="ident">w</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">h</span> <span class="kw">as</span> <span class="ident">i32</span>)),
                 );
             } <span class="kw">else</span> {
                 <span class="comment">// lock the min/max sizes to current size</span>
                 <span class="kw">let</span> (<span class="ident">w</span>, <span class="ident">h</span>) <span class="op">=</span> <span class="ident">inner</span>.<span class="ident">current_size</span>;
-                <span class="self">self</span>.<span class="ident">shell_surface</span>
-                    .<span class="ident">set_min_size</span>(<span class="prelude-val">Some</span>(<span class="ident">frame</span>.<span class="ident">add_borders</span>(<span class="ident">w</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">h</span> <span class="kw">as</span> <span class="ident">i32</span>)));
-                <span class="self">self</span>.<span class="ident">shell_surface</span>
-                    .<span class="ident">set_max_size</span>(<span class="prelude-val">Some</span>(<span class="ident">frame</span>.<span class="ident">add_borders</span>(<span class="ident">w</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">h</span> <span class="kw">as</span> <span class="ident">i32</span>)));
+                <span class="self">self</span>.<span class="ident">shell_surface</span>.<span class="ident">set_min_size</span>(<span class="prelude-val">Some</span>(<span class="ident">frame</span>.<span class="ident">add_borders</span>(<span class="ident">w</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">h</span> <span class="kw">as</span> <span class="ident">i32</span>)));
+                <span class="self">self</span>.<span class="ident">shell_surface</span>.<span class="ident">set_max_size</span>(<span class="prelude-val">Some</span>(<span class="ident">frame</span>.<span class="ident">add_borders</span>(<span class="ident">w</span> <span class="kw">as</span> <span class="ident">i32</span>, <span class="ident">h</span> <span class="kw">as</span> <span class="ident">i32</span>)));
             }
         }
     }
@@ -1390,6 +1387,9 @@
     <span class="doccomment">/// Provide either a tuple `Some((width, height))` or `None` to unset the</span>
     <span class="doccomment">/// minimum size.</span>
     <span class="doccomment">///</span>
+    <span class="doccomment">/// Setting either value in the tuple to `0` means that this axis should not</span>
+    <span class="doccomment">/// be limited.</span>
+    <span class="doccomment">///</span>
     <span class="doccomment">/// The provided size is the interior size, not counting decorations.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This size is expressed in logical pixels, like the one received</span>
@@ -1407,6 +1407,9 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// Provide either a tuple `Some((width, height))` or `None` to unset the</span>
     <span class="doccomment">/// maximum size.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// Setting either value in the tuple to `0` means that this axis should not</span>
+    <span class="doccomment">/// be limited.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// The provided size is the interior size, not counting decorations.</span>
     <span class="doccomment">///</span>
@@ -1582,10 +1585,7 @@
     <span class="doccomment">/// Create a ColorSpec that is always the same color</span>
     <span class="attribute">#[<span class="ident">inline</span>]</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">identical</span>(<span class="ident">color</span>: <span class="ident">ARGBColor</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ColorSpec</span> {
-        <span class="ident">ColorSpec</span> {
-            <span class="ident">active</span>: <span class="ident">color</span>,
-            <span class="ident">inactive</span>: <span class="ident">color</span>,
-        }
+        <span class="ident">ColorSpec</span> { <span class="ident">active</span>: <span class="ident">color</span>, <span class="ident">inactive</span>: <span class="ident">color</span> }
     }
 
     <span class="doccomment">/// Create a ColorSpec corresponding to an always invisible color</span>
@@ -1636,12 +1636,7 @@
 <span class="kw">impl</span> <span class="ident">ARGBColor</span> {
     <span class="doccomment">/// The invisible `#00000000` color</span>
     <span class="kw">pub</span> <span class="kw">const</span> <span class="kw">fn</span> <span class="ident">zero</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ARGBColor</span> {
-        <span class="ident">ARGBColor</span> {
-            <span class="ident">a</span>: <span class="number">0</span>,
-            <span class="ident">r</span>: <span class="number">0</span>,
-            <span class="ident">g</span>: <span class="number">0</span>,
-            <span class="ident">b</span>: <span class="number">0</span>,
-        }
+        <span class="ident">ARGBColor</span> { <span class="ident">a</span>: <span class="number">0</span>, <span class="ident">r</span>: <span class="number">0</span>, <span class="ident">g</span>: <span class="number">0</span>, <span class="ident">b</span>: <span class="number">0</span> }
     }
 }
 
@@ -1653,13 +1648,8 @@
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span>[<span class="ident">u8</span>; <span class="number">4</span>]<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">ARGBColor</span> {
     <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">array</span>: [<span class="ident">u8</span>; <span class="number">4</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">ARGBColor</span> {
-        <span class="ident">ARGBColor</span> {
-            <span class="ident">a</span>: <span class="ident">array</span>[<span class="number">0</span>],
-            <span class="ident">r</span>: <span class="ident">array</span>[<span class="number">1</span>],
-            <span class="ident">g</span>: <span class="ident">array</span>[<span class="number">2</span>],
-            <span class="ident">b</span>: <span class="ident">array</span>[<span class="number">3</span>],
-        }
+        <span class="ident">ARGBColor</span> { <span class="ident">a</span>: <span class="ident">array</span>[<span class="number">0</span>], <span class="ident">r</span>: <span class="ident">array</span>[<span class="number">1</span>], <span class="ident">g</span>: <span class="ident">array</span>[<span class="number">2</span>], <span class="ident">b</span>: <span class="ident">array</span>[<span class="number">3</span>] }
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "smithay_client_toolkit";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "smithay_client_toolkit";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
