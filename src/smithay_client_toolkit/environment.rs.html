@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/environment.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>environment.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../smithay_client_toolkit/index.html'><div class='logo-container'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/environment.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>environment.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../smithay_client_toolkit/index.html'><div class='logo-container rust-logo'><img src='../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><span class="help-button">?</span>
+                <a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -335,6 +336,40 @@
 <span id="335">335</span>
 <span id="336">336</span>
 <span id="337">337</span>
+<span id="338">338</span>
+<span id="339">339</span>
+<span id="340">340</span>
+<span id="341">341</span>
+<span id="342">342</span>
+<span id="343">343</span>
+<span id="344">344</span>
+<span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
+<span id="355">355</span>
+<span id="356">356</span>
+<span id="357">357</span>
+<span id="358">358</span>
+<span id="359">359</span>
+<span id="360">360</span>
+<span id="361">361</span>
+<span id="362">362</span>
+<span id="363">363</span>
+<span id="364">364</span>
+<span id="365">365</span>
+<span id="366">366</span>
+<span id="367">367</span>
+<span id="368">368</span>
+<span id="369">369</span>
+<span id="370">370</span>
+<span id="371">371</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="doccomment">//! Environment management utilities</span>
 <span class="doccomment">//!</span>
@@ -370,11 +405,13 @@
 <span class="doccomment">//! [`default_environment!`](../macro.default_environment.html) macro to quickly setup things and bring</span>
 <span class="doccomment">//! in all SCTK modules.</span>
 
-<span class="kw">use</span> <span class="ident">std</span>::{<span class="ident">cell</span>::<span class="ident">RefCell</span>, <span class="ident">rc</span>::<span class="ident">Rc</span>};
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">cell</span>::<span class="ident">RefCell</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">io</span>::<span class="prelude-ty">Result</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">rc</span>::<span class="ident">Rc</span>;
 
 <span class="kw">use</span> <span class="ident">wayland_client</span>::{
     <span class="ident">protocol</span>::{<span class="ident">wl_display</span>, <span class="ident">wl_registry</span>},
-    <span class="ident">Attached</span>, <span class="ident">DispatchData</span>, <span class="ident">GlobalEvent</span>, <span class="ident">GlobalManager</span>, <span class="ident">Interface</span>, <span class="ident">Proxy</span>,
+    <span class="ident">Attached</span>, <span class="ident">DispatchData</span>, <span class="ident">EventQueue</span>, <span class="ident">GlobalEvent</span>, <span class="ident">GlobalManager</span>, <span class="ident">Interface</span>, <span class="ident">Proxy</span>,
 };
 
 <span class="comment">/*
@@ -392,7 +429,7 @@
         <span class="ident">ddata</span>: <span class="ident">DispatchData</span>,
     );
     <span class="doccomment">/// Access the global if it was signaled</span>
-    <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;&gt;</span>;
 }
 
 <span class="doccomment">/// Required trait for implementing a handler for &quot;multi&quot; globals</span>
@@ -408,7 +445,7 @@
     <span class="doccomment">/// The instance with given id was removed</span>
     <span class="kw">fn</span> <span class="ident">removed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">u32</span>, <span class="ident">ddata</span>: <span class="ident">DispatchData</span>);
     <span class="doccomment">/// Access all the currently existing instances</span>
-    <span class="kw">fn</span> <span class="ident">get_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span>;
+    <span class="kw">fn</span> <span class="ident">get_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;&gt;</span>;
 }
 
 <span class="comment">/*
@@ -429,11 +466,39 @@
     <span class="doccomment">/// The underlying `GlobalManager`, if you need to do manual interaction with the</span>
     <span class="doccomment">/// registry. See `wayland-client` documentation for details.</span>
     <span class="kw">pub</span> <span class="ident">manager</span>: <span class="ident">GlobalManager</span>,
-    <span class="ident">inner</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">inner</span>: <span class="ident">Rc</span><span class="op">&lt;</span><span class="ident">RefCell</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">InnerEnv</span> <span class="op">+</span> <span class="lifetime">&#39;static</span><span class="op">&gt;</span> <span class="ident">Environment</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="doccomment">/// Initialize the `Environment`</span>
+    <span class="doccomment">/// Create new `Environment`</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This requires access to a `wl_display` attached to the `event_queue`.</span>
+    <span class="doccomment">/// You also need to provide an instance of the inner environment type declared</span>
+    <span class="doccomment">/// using the [`environment!`](../macro.environment.html) macro.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If you instead used the [`default_environment!`](../macro.default_environment.html), then</span>
+    <span class="doccomment">/// you need to initialize your `Environment` using the</span>
+    <span class="doccomment">/// [`new_default_environment!`](../macro.new_default_environment.html) macro.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// `std::io::Error` could be returned if initial roundtrips to the server failed.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// If this call indefinitely blocks when doing initial roundtrips this can only be</span>
+    <span class="doccomment">/// caused by server bugs.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(
+        <span class="ident">display</span>: <span class="kw-2">&amp;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">wl_display</span>::<span class="ident">WlDisplay</span><span class="op">&gt;</span>,
+        <span class="ident">queue</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">EventQueue</span>,
+        <span class="ident">env</span>: <span class="ident">E</span>,
+    ) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">Environment</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;&gt;</span> {
+        <span class="kw">let</span> <span class="ident">environment</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">new_pending</span>(<span class="ident">display</span>, <span class="ident">env</span>);
+
+        <span class="comment">// Fully initialize the environment.</span>
+        <span class="ident">queue</span>.<span class="ident">sync_roundtrip</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> (), <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> <span class="macro">unreachable</span><span class="macro">!</span>())<span class="question-mark">?</span>;
+        <span class="ident">queue</span>.<span class="ident">sync_roundtrip</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> (), <span class="op">|</span><span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span><span class="op">|</span> <span class="macro">unreachable</span><span class="macro">!</span>())<span class="question-mark">?</span>;
+
+        <span class="prelude-val">Ok</span>(<span class="ident">environment</span>)
+    }
+
+    <span class="doccomment">/// Create new pending `Environment`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This requires access to a `wl_display` attached to an event queue (on which the main SCTK logic</span>
     <span class="doccomment">/// will be attached). You also need to provide an instance of the inner environment type declared</span>
@@ -441,10 +506,14 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// If you instead used the [`default_environment!`](../macro.default_environment.html), then you need</span>
     <span class="doccomment">/// to initialize your `Environment` using the</span>
-    <span class="doccomment">/// [`init_default_environment!`](../macro.init_default_environment.html) macro.</span>
+    <span class="doccomment">/// [`new_default_environment!`](../macro.new_default_environment.html) macro.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// You will need to do two roundtrips of the event queue afterward to fully initialize the environment.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">init</span>(<span class="ident">display</span>: <span class="kw-2">&amp;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">wl_display</span>::<span class="ident">WlDisplay</span><span class="op">&gt;</span>, <span class="ident">env</span>: <span class="ident">E</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Environment</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="doccomment">/// You should prefer to use `Environment::new`, unless you want to control initialization</span>
+    <span class="doccomment">/// manually or you create additional environment meaning that the initialization may be fine</span>
+    <span class="doccomment">/// with just `dispatch_pending` of the event queue, instead of two roundtrips to</span>
+    <span class="doccomment">/// fully initialize environment. If you manually initialize your environment two sync</span>
+    <span class="doccomment">/// roundtrips are required.</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new_pending</span>(<span class="ident">display</span>: <span class="kw-2">&amp;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">wl_display</span>::<span class="ident">WlDisplay</span><span class="op">&gt;</span>, <span class="ident">env</span>: <span class="ident">E</span>) <span class="op">-&gt;</span> <span class="ident">Environment</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">inner</span> <span class="op">=</span> <span class="ident">Rc</span>::<span class="ident">new</span>(<span class="ident">RefCell</span>::<span class="ident">new</span>(<span class="ident">env</span>));
 
         <span class="kw">let</span> <span class="ident">my_inner</span> <span class="op">=</span> <span class="ident">inner</span>.<span class="ident">clone</span>();
@@ -455,7 +524,7 @@
 
         <span class="kw">let</span> <span class="ident">manager</span> <span class="op">=</span> <span class="ident">GlobalManager</span>::<span class="ident">new_with_cb</span>(<span class="kw-2">&amp;</span><span class="ident">display</span>, <span class="ident">my_cb</span>);
 
-        <span class="ident">Environment</span> { <span class="ident">manager</span>, <span class="ident">inner</span> }
+        <span class="self">Self</span> { <span class="ident">manager</span>, <span class="ident">inner</span> }
     }
 }
 
@@ -467,7 +536,7 @@
     <span class="doccomment">/// method of the appropriate `GlobalHandler`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// It returns `None` if the global has not (yet) been signaled by the registry.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_global</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_global</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;&gt;</span>
     <span class="kw">where</span>
         <span class="ident">E</span>: <span class="ident">GlobalHandler</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>,
     {
@@ -478,13 +547,13 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method is similar to `get_global`, but will panic with a detailed error</span>
     <span class="doccomment">/// message if the requested global was not advertized by the server.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_global</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">require_global</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">E</span>: <span class="ident">GlobalHandler</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>,
     {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">borrow</span>().<span class="ident">get</span>() {
-            <span class="prelude-val">Some</span>(<span class="ident">g</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">g</span>,
-            <span class="prelude-val">None</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;[SCTK] A missing global was required: {}&quot;</span>, <span class="ident">I</span>::<span class="ident">NAME</span>),
+            <span class="prelude-val">Some</span>(<span class="ident">g</span>) <span class="op">=&gt;</span> <span class="ident">g</span>,
+            <span class="prelude-val">None</span> <span class="op">=&gt;</span> <span class="macro">panic</span><span class="macro">!</span>(<span class="string">&quot;[SCTK] A missing global was required: {}&quot;</span>, <span class="ident">I</span>::<span class="ident">NAME</span>),
         }
     }
 
@@ -494,7 +563,7 @@
     <span class="doccomment">/// requested &quot;multi&quot; global that has been previously declared in the `environment!`</span>
     <span class="doccomment">/// macro. It is forwarded to the `get_all()` method of the appropriate</span>
     <span class="doccomment">/// `MultiGlobalHandler`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_all_globals</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_all_globals</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;&gt;</span>
     <span class="kw">where</span>
         <span class="ident">E</span>: <span class="ident">MultiGlobalHandler</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>,
     {
@@ -508,14 +577,14 @@
     <span class="doccomment">/// [`default_environment!`](../macro.default_environment.html) macro.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This method returns the return value of your closure.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_inner</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">E</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">T</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">with_inner</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">E</span>) <span class="op">-&gt;</span> <span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) <span class="op">-&gt;</span> <span class="ident">T</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">inner</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">borrow_mut</span>();
         <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="ident">inner</span>)
     }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> <span class="ident">Clone</span> <span class="kw">for</span> <span class="ident">Environment</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
-    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Environment</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">clone</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Environment</span><span class="op">&lt;</span><span class="ident">E</span><span class="op">&gt;</span> {
         <span class="ident">Environment</span> { <span class="ident">manager</span>: <span class="self">self</span>.<span class="ident">manager</span>.<span class="ident">clone</span>(), <span class="ident">inner</span>: <span class="self">self</span>.<span class="ident">inner</span>.<span class="ident">clone</span>() }
     }
 }
@@ -546,17 +615,17 @@
 <span class="doccomment">/// It is appropriate for globals that never generate events, like `wl_compositor`</span>
 <span class="doccomment">/// or `wl_data_device_manager`.</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">SimpleGlobal</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span><span class="op">&gt;</span> {
-    <span class="ident">global</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">global</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span><span class="op">&gt;</span> <span class="ident">SimpleGlobal</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> {
     <span class="doccomment">/// Create a new handler</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">SimpleGlobal</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="ident">SimpleGlobal</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> {
         <span class="ident">SimpleGlobal</span> { <span class="ident">global</span>: <span class="prelude-val">None</span> }
     }
 }
 
-<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span> <span class="ident">GlobalHandler</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">SimpleGlobal</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">I</span>: <span class="ident">Interface</span> <span class="op">+</span> <span class="ident">Clone</span> <span class="op">+</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;&gt;</span> <span class="op">+</span> <span class="ident">AsRef</span><span class="op">&lt;</span><span class="ident">Proxy</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;&gt;</span><span class="op">&gt;</span> <span class="ident">GlobalHandler</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">SimpleGlobal</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span> {
     <span class="kw">fn</span> <span class="ident">created</span>(
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
         <span class="ident">registry</span>: <span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">wl_registry</span>::<span class="ident">WlRegistry</span><span class="op">&gt;</span>,
@@ -566,7 +635,7 @@
     ) {
         <span class="self">self</span>.<span class="ident">global</span> <span class="op">=</span> <span class="prelude-val">Some</span>((<span class="kw-2">*</span><span class="ident">registry</span>.<span class="ident">bind</span>::<span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span>(<span class="ident">version</span>, <span class="ident">id</span>)).<span class="ident">clone</span>())
     }
-    <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Attached</span><span class="op">&lt;</span><span class="ident">I</span><span class="op">&gt;&gt;</span> {
         <span class="self">self</span>.<span class="ident">global</span>.<span class="ident">clone</span>()
     }
 }
@@ -617,9 +686,9 @@
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules</span><span class="macro">!</span> <span class="ident">environment</span> {
     (<span class="macro-nonterminal">$</span><span class="macro-nonterminal">env_name</span>:<span class="ident">ident</span>,
-        <span class="ident">singles</span> <span class="op">=</span> [$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">sty</span>:<span class="ident">ty</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">sname</span>:<span class="ident">ident</span>),<span class="op">*</span> $(,)<span class="question-mark">?</span>],
-        <span class="ident">multis</span> <span class="op">=</span> [$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span>:<span class="ident">ty</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>:<span class="ident">ident</span>),<span class="op">*</span> $(,)<span class="question-mark">?</span>]$(,)<span class="question-mark">?</span>
-    ) <span class="op">=</span><span class="op">&gt;</span> {
+        <span class="ident">singles</span> <span class="op">=</span> [$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">sty</span>:<span class="ident">ty</span> <span class="op">=&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">sname</span>:<span class="ident">ident</span>),<span class="op">*</span> $(,)<span class="question-mark">?</span>],
+        <span class="ident">multis</span> <span class="op">=</span> [$(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span>:<span class="ident">ty</span> <span class="op">=&gt;</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>:<span class="ident">ident</span>),<span class="op">*</span> $(,)<span class="question-mark">?</span>]$(,)<span class="question-mark">?</span>
+    ) <span class="op">=&gt;</span> {
         <span class="kw">impl</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">InnerEnv</span> <span class="kw">for</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">env_name</span> {
             <span class="kw">fn</span> <span class="ident">process_event</span>(
                 <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
@@ -628,20 +697,20 @@
                 <span class="ident">ddata</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">DispatchData</span>,
             ) {
                 <span class="kw">match</span> <span class="ident">event</span> {
-                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">GlobalEvent</span>::<span class="ident">New</span> { <span class="ident">id</span>, <span class="ident">interface</span>, <span class="ident">version</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">interface</span>[..] {
+                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">GlobalEvent</span>::<span class="ident">New</span> { <span class="ident">id</span>, <span class="ident">interface</span>, <span class="ident">version</span> } <span class="op">=&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">interface</span>[..] {
                         $(
-                            <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">sty</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Interface</span><span class="op">&gt;</span>::<span class="ident">NAME</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">GlobalHandler</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">sty</span><span class="op">&gt;</span>::<span class="ident">created</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">sname</span>, <span class="ident">registry</span>, <span class="ident">id</span>, <span class="ident">version</span>, <span class="ident">ddata</span>),
+                            <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">sty</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Interface</span><span class="op">&gt;</span>::<span class="ident">NAME</span> <span class="op">=&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">GlobalHandler</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">sty</span><span class="op">&gt;</span>::<span class="ident">created</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">sname</span>, <span class="ident">registry</span>, <span class="ident">id</span>, <span class="ident">version</span>, <span class="ident">ddata</span>),
                         )<span class="op">*</span>
                         $(
-                            <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Interface</span><span class="op">&gt;</span>::<span class="ident">NAME</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">MultiGlobalHandler</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span><span class="op">&gt;</span>::<span class="ident">created</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>, <span class="ident">registry</span>, <span class="ident">id</span>, <span class="ident">version</span>, <span class="ident">ddata</span>),
+                            <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Interface</span><span class="op">&gt;</span>::<span class="ident">NAME</span> <span class="op">=&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">MultiGlobalHandler</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span><span class="op">&gt;</span>::<span class="ident">created</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>, <span class="ident">registry</span>, <span class="ident">id</span>, <span class="ident">version</span>, <span class="ident">ddata</span>),
                         )<span class="op">*</span>
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> { <span class="comment">/* ignore unkown globals */</span> }
+                        <span class="kw">_</span> <span class="op">=&gt;</span> { <span class="comment">/* ignore unkown globals */</span> }
                     },
-                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">GlobalEvent</span>::<span class="ident">Removed</span> { <span class="ident">id</span>, <span class="ident">interface</span> } <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">interface</span>[..] {
+                    <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">GlobalEvent</span>::<span class="ident">Removed</span> { <span class="ident">id</span>, <span class="ident">interface</span> } <span class="op">=&gt;</span> <span class="kw">match</span> <span class="kw-2">&amp;</span><span class="ident">interface</span>[..] {
                         $(
-                            <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Interface</span><span class="op">&gt;</span>::<span class="ident">NAME</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">MultiGlobalHandler</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span><span class="op">&gt;</span>::<span class="ident">removed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>, <span class="ident">id</span>, <span class="ident">ddata</span>),
+                            <span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span> <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Interface</span><span class="op">&gt;</span>::<span class="ident">NAME</span> <span class="op">=&gt;</span> <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">MultiGlobalHandler</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span><span class="op">&gt;</span>::<span class="ident">removed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>, <span class="ident">id</span>, <span class="ident">ddata</span>),
                         )<span class="op">*</span>
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> { <span class="comment">/* ignore unknown globals */</span> }
+                        <span class="kw">_</span> <span class="op">=&gt;</span> { <span class="comment">/* ignore unknown globals */</span> }
                     }
                 }
             }
@@ -652,7 +721,7 @@
                 <span class="kw">fn</span> <span class="ident">created</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">registry</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Attached</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">protocol</span>::<span class="ident">wl_registry</span>::<span class="ident">WlRegistry</span><span class="op">&gt;</span>, <span class="ident">id</span>: <span class="ident">u32</span>, <span class="ident">version</span>: <span class="ident">u32</span>, <span class="ident">ddata</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">DispatchData</span>) {
                     <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">GlobalHandler</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">sty</span><span class="op">&gt;</span>::<span class="ident">created</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">sname</span>, <span class="ident">registry</span>, <span class="ident">id</span>, <span class="ident">version</span>, <span class="ident">ddata</span>)
                 }
-                <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Attached</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">sty</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                <span class="kw">fn</span> <span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Attached</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">sty</span><span class="op">&gt;&gt;</span> {
                     <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">GlobalHandler</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">sty</span><span class="op">&gt;</span>::<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">sname</span>)
                 }
             }
@@ -666,7 +735,7 @@
                 <span class="kw">fn</span> <span class="ident">removed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">id</span>: <span class="ident">u32</span>, <span class="ident">ddata</span>: <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">DispatchData</span>) {
                     <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">MultiGlobalHandler</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span><span class="op">&gt;</span>::<span class="ident">removed</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>, <span class="ident">id</span>, <span class="ident">ddata</span>)
                 }
-                <span class="kw">fn</span> <span class="ident">get_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Attached</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+                <span class="kw">fn</span> <span class="ident">get_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Vec</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">reexports</span>::<span class="ident">client</span>::<span class="ident">Attached</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span><span class="op">&gt;&gt;</span> {
                     <span class="macro-nonterminal">$</span><span class="kw">crate</span>::<span class="macro-nonterminal">environment</span>::<span class="ident">MultiGlobalHandler</span>::<span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">mty</span><span class="op">&gt;</span>::<span class="ident">get_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="macro-nonterminal">$</span><span class="macro-nonterminal">mname</span>)
                 }
             }
